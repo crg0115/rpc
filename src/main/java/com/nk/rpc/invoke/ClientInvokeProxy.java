@@ -22,9 +22,7 @@ public class ClientInvokeProxy<T> extends AbstractInvocationHandler {
 
         ClientInvokeHandler handler = RpcContext.getInstance().getClientInvokeHandler();
         RpcCallBack rpcCallBack = handler.sendRequest(id, request);
-        Object result = rpcCallBack.start();
-        System.out.println(request);
-        return result;
+        return rpcCallBack.start();
     }
 }
 

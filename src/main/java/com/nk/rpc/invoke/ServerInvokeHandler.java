@@ -1,5 +1,6 @@
 package com.nk.rpc.invoke;
 
+import com.nk.rpc.context.RpcContext;
 import com.nk.rpc.protocol.PackageHandler;
 import com.nk.rpc.protocol.ProtocolParser;
 import com.nk.rpc.protocol.entity.Payload;
@@ -41,11 +42,11 @@ public class ServerInvokeHandler extends ChannelInboundHandlerAdapter {
 
     private void process(ChannelHandlerContext ctx, Protocol protocol) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException, IOException {
         Payload payload = protocol.getPayload();
-        Class<?> aClass = Class.forName(payload.getService());
+        Class<?> aClass = RpcContext.getInstance().getHandlerMap().get(payload.getService()).getClass();
         Method declaredMethod = aClass.getDeclaredMethod(payload.getMethod(), payload.getParameterTypes());
 
         if (declaredMethod != null) {
-            Object invoke = 1111;//declaredMethod.invoke(aClass.newInstance(), payload.getParamList());
+            Object invoke = declaredMethod.invoke(aClass.newInstance(), payload.getParamList());
             System.out.println(invoke);
 
             Payload returnPayload = new Payload();
